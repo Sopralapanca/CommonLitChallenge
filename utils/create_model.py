@@ -46,7 +46,7 @@ class RegressorModel(nn.Module):
         # Feed the input to Bert model to obtain contextualized representations
         outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
                                output_hidden_states=False)  # returns a BaseModelOutput object
-        print(outputs)
+
 
         if self.pooling == 'cls':
             # Obtain the representations of [CLS] heads
