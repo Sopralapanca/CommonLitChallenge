@@ -1,41 +1,68 @@
 import torch.nn as nn
-from transformers import AutoModel
+from transformers import AutoModel, AutoConfig
 import torch
-from tqdm.notebook import tqdm
 import gc
+import numpy as np
+
+
+class EarlyStopper:
+    def __init__(self, patience=1, min_delta=0.0):
+        self.patience = patience
+        self.min_delta = min_delta
+        self.counter = 0
+        self.min_validation_loss = np.inf
+
+    def early_stop(self, validation_loss):
+        if validation_loss < self.min_validation_loss:
+            self.min_validation_loss = validation_loss
+            self.counter = 0
+        elif validation_loss > (self.min_validation_loss + self.min_delta):
+            self.counter += 1
+            if self.counter >= self.patience:
+                return True
+        return False
 
 
 class RegressorModel(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, pooling="cls"):
         super(RegressorModel, self).__init__()
         self.model_name = config['model']
-        # The output layer that takes the [CLS] representation and gives an output
+        self.pooling = pooling
+        self.model_config = AutoConfig.from_pretrained(self.model_name)
 
         self.freeze = config['freeze_encoder']
 
-        self.encoder = AutoModel.from_pretrained(self.model_name)
+        self.encoder = AutoModel.from_pretrained(self.model_name, config=self.model_config)
         if self.freeze:
             for param in self.encoder.base_model.parameters():
                 param.requires_grad = False
 
+        # The output layer that takes the [CLS] representation and gives an output
         self.cls_layer1 = nn.Linear(self.encoder.config.hidden_size, 128)
         self.relu1 = nn.LeakyReLU()
-        self.ff1 = nn.Linear(128, 64)
-        self.ff2 = nn.Linear(64, 32)
-        self.ff3 = nn.Linear(32, 2)
+        self.ff1 = nn.Linear(128, 2)
 
     def forward(self, input_ids, attention_mask):
         # Feed the input to Bert model to obtain contextualized representations
-        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
-        # Obtain the representations of [CLS] heads
-        logits = outputs.last_hidden_state[:, 0, :]
+        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
+                               output_hidden_states=False)  # returns a BaseModelOutput object
+        print(outputs)
+
+        if self.pooling == 'cls':
+            # Obtain the representations of [CLS] heads
+            logits = outputs.last_hidden_state[:, 0, :]
+
+        if self.pooling == 'mean-pooling':
+            last_hidden_state = outputs.last_hidden_state
+            input_mask_expanded = attention_mask.unsqueeze(-1).expand(last_hidden_state.size()).float()
+            sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, 1)
+            sum_mask = input_mask_expanded.sum(1)
+            sum_mask = torch.clamp(sum_mask, min=1e-9)
+            logits = sum_embeddings / sum_mask
+
         output = self.cls_layer1(logits)
         output = self.relu1(output)
         output = self.ff1(output)
-        output = self.relu1(output)
-        output = self.ff2(output)
-        output = self.relu1(output)
-        output = self.ff3(output)
         return output
 
 
@@ -79,7 +106,7 @@ class Trainer:
         loss = torch.mean(torch.sqrt(colwise_mse), dim=0)
         return loss
 
-    def train_one_epoch(self, epoch, outer_progress, outer_iterations):
+    def train_one_epoch(self, epoch, outer_progress):
 
         running_loss = 0.
         inner_iterations = len(self.train_loader)
@@ -114,7 +141,7 @@ class Trainer:
         print(f"\r{outer_progress} {inner_progress}", end="")
 
     @torch.no_grad()
-    def valid_one_epoch(self, epoch, outer_progress, outer_iterations):
+    def valid_one_epoch(self, epoch, outer_progress):
 
         running_loss = 0.
         inner_iterations = len(self.val_loader)
@@ -155,18 +182,23 @@ class Trainer:
         # Define the number of iterations for both loops
         outer_iterations = self.config['epochs']
 
+        early_stopper = EarlyStopper(patience=3, min_delta=0.05)
+
         # Create outer progress bar
         for epoch in range(1, outer_iterations + 1):
             outer_progress = f"Epoch: {epoch}/{outer_iterations}"
             self.model.train()
 
-            self.train_one_epoch(epoch, outer_progress, outer_iterations)
+            self.train_one_epoch(epoch, outer_progress)
             self.clear()
 
             self.model.eval()
-            self.valid_one_epoch(epoch, outer_progress, outer_iterations)
+            self.valid_one_epoch(epoch, outer_progress)
 
             self.clear()
+
+            if early_stopper.early_stop(self.val_losses[-1]):
+                break
 
             print()
 

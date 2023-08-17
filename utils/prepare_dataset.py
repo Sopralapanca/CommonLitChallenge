@@ -9,6 +9,8 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 import re
+from utils.dynamic_padding import SmartBatchingDataset, SmartBatchingSampler, SmartBatchingCollate
+
 
 def preprocessText(text, intense=False):
     try:
@@ -78,7 +80,10 @@ class CommonLitDataset(Dataset):
         return input_ids, attention_mask, target
 
 
-def pipeline(config, split=0.2, only_text=False):
+def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=None, split=0.2):
+    if preprocess_cols is None:
+        preprocess_cols = []
+
     summaries_train_path = "./data/summaries_train.csv"
     prompt_train_path = "./data/prompts_train.csv"
 
@@ -87,57 +92,65 @@ def pipeline(config, split=0.2, only_text=False):
 
     training_data = train_data.merge(prompt_data, on='prompt_id')
 
-    #string_columns = ["text", "prompt_question", "prompt_title", "prompt_text"]
-
-    #for col in string_columns:
+    for col in input_cols:
         # apply preprocessText function to each text column in the dfTrain dataframe
-    #    training_data[col] = training_data[col].apply(lambda x: preprocessText(x))
+        if col in preprocess_cols:
+            training_data[col] = training_data[col].apply(lambda x: preprocessText(x, intense=True))
+        else:
+            training_data[col] = training_data[col].apply(lambda x: preprocessText(x))
 
-    #summary_word_count = training_data['text'].apply(lambda x: len(x.split()))
-    #prompt_word_count = training_data['prompt_text'].apply(lambda x: len(x.split()))
-    #print("Summary word count before preprocessing: ", summary_word_count.max())
-    #print("prompt word count before preprocessing: ", prompt_word_count.max())
-
-    training_data["text"] = training_data["text"].apply(lambda x: preprocessText(x))
-    training_data["prompt_text"] = training_data["prompt_text"].apply(lambda x: preprocessText(x, intense=True))
-
-    #summary_word_count = training_data['text'].apply(lambda x: len(x.split()))
-    #prompt_word_count = training_data['prompt_text'].apply(lambda x: len(x.split()))
-    #print("Summary word count after preprocessing: ", summary_word_count.max())
-    #print("prompt word count after preprocessing: ", prompt_word_count.max())
-    #print(training_data["prompt_text"][0])
-
-    train, test = train_test_split(training_data, test_size=split)
-    train, valid = train_test_split(train, test_size=split)
+    train, test = train_test_split(training_data, test_size=split, random_state=42)
+    train, valid = train_test_split(train, test_size=split, random_state=42)
 
     tokenizer = AutoTokenizer.from_pretrained(config['model'])
-    if only_text:
-        train_encodings = tokenizer(train["text"].values.tolist(), truncation=True, padding=True,
-                                    add_special_tokens=True)
-        val_encodings = tokenizer(valid["text"].values.tolist(), truncation=True, padding=True, add_special_tokens=True)
-        test_encodings = tokenizer(test["text"].values.tolist(), truncation=True, padding=True, add_special_tokens=True)
+    print("Tokenization...")
+    if dynamic_padding:
+        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols)
+
+        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols)
+        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols)
+
+        train_loader = train_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
+                                                pad_id=tokenizer.pad_token_id)
+        valid_loader = valid_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
+                                                pad_id=tokenizer.pad_token_id)
+        test_loader = test_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
+                                              pad_id=tokenizer.pad_token_id)
 
     else:
-        # combine strings of two dataframe columns and output as a list
-        train_encodings = tokenizer(train["text"].values.tolist(), train["prompt_text"].values.tolist(),
-                                    truncation=True, padding=True, add_special_tokens=True)
-        val_encodings = tokenizer(valid["text"].values.tolist(), valid["prompt_text"].values.tolist(),
-                                    truncation=True, padding=True, add_special_tokens=True)
-        test_encodings = tokenizer(test["text"].values.tolist(), test["prompt_text"].values.tolist(),
-                                    truncation=True, padding=True, add_special_tokens=True)
+        input_train_df = train[input_cols]
+        # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
+        input_train_df['combined_col'] = input_train_df.apply(
+            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
+            axis=1)
 
+        input_valid_df = valid[input_cols]
+        # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
+        input_valid_df['combined_col'] = input_valid_df.apply(
+            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
+            axis=1)
 
-    target_cols = ["content", "wording"]
-    target_cols_train = train[target_cols].values
-    target_cols_valid = valid[target_cols].values
-    target_cols_test = test[target_cols].values
+        input_test_df = test[input_cols]
+        # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
+        input_test_df['combined_col'] = input_test_df.apply(
+            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
+            axis=1)
 
-    train_set = CommonLitDataset(encodings=train_encodings, labels=target_cols_train)
-    valid_set = CommonLitDataset(encodings=val_encodings, labels=target_cols_valid)
-    test_set = CommonLitDataset(encodings=test_encodings, labels=target_cols_test)
+        # combine each string in the columns into a single string and tokenize it
+        train_encodings = tokenizer(input_train_df.values.tolist(), truncation=True, padding=True)
+        val_encodings = tokenizer(input_valid_df.values.tolist(), truncation=True, padding=True)
+        test_encodings = tokenizer(input_test_df.values.tolist(), truncation=True, padding=True)
 
-    train_loader = DataLoader(dataset=train_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
-    valid_loader = DataLoader(dataset=valid_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
-    test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
+        target_cols_train = train[target_cols].values
+        target_cols_valid = valid[target_cols].values
+        target_cols_test = test[target_cols].values
+
+        train_set = CommonLitDataset(encodings=train_encodings, labels=target_cols_train)
+        valid_set = CommonLitDataset(encodings=val_encodings, labels=target_cols_valid)
+        test_set = CommonLitDataset(encodings=test_encodings, labels=target_cols_test)
+
+        train_loader = DataLoader(dataset=train_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
+        valid_loader = DataLoader(dataset=valid_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
+        test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 
     return train_loader, valid_loader, test_loader, tokenizer

@@ -1,29 +1,31 @@
 import torch
 import matplotlib.pyplot as plt
 import csv
+import nvidia_smi
 
 
 def get_least_utilized_gpu():
     """
     Check which GPUs are available and returns the GPU with less memory occupied
-    :return:
+    :return: torch.device object with the least utilized GPU
     """
-    device_count = torch.cuda.device_count()
-    least_memory = float('inf')
-    least_utilized_gpu = None
 
-    for i in range(device_count):
-        memory_allocated = torch.cuda.memory_allocated(device=i)
-        if memory_allocated < least_memory:
-            least_memory = memory_allocated
-            least_utilized_gpu = i
+    devices = []
+    nvidia_smi.nvmlInit()
+    deviceCount = nvidia_smi.nvmlDeviceGetCount()
+    for i in range(deviceCount):
+        handle = nvidia_smi.nvmlDeviceGetHandleByIndex(i)
+        gpu_util = (nvidia_smi.nvmlDeviceGetUtilizationRates(handle).gpu/100.0)
+        mem_free = nvidia_smi.nvmlDeviceGetMemoryInfo(handle).free
+        devices.append((gpu_util, mem_free, i))
 
-    return least_utilized_gpu
-
-
-# least_utilized_gpu = get_least_utilized_gpu()
-# print(f"GPU with least usage: {least_utilized_gpu}")
-# device = torch.device(f"cuda:{least_utilized_gpu}")
+    # Sort the list of GPUs by max memory free in decreasing order and if memory free is same, then by GPU utilization
+    devices.sort(key=lambda x: (x[1], x[0]), reverse=True)
+    dev = devices[0][2]
+    print(f"GPU with least memory usage: {dev}")
+    device = torch.device(f"cuda:{dev}")
+    print(device)
+    return device
 
 def plot_and_save_graph(epochs, model_name, train_losses, val_losses):
     # Create the plot
