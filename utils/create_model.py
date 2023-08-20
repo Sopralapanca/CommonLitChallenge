@@ -24,29 +24,39 @@ class EarlyStopper:
 
 
 class RegressorModel(nn.Module):
-    def __init__(self, config, pooling="cls"):
+    def __init__(self, config, features_dim, pooling="cls", nodropout=True):
         super(RegressorModel, self).__init__()
         self.model_name = config['model']
         self.pooling = pooling
         self.model_config = AutoConfig.from_pretrained(self.model_name)
 
-        self.freeze = config['freeze_encoder']
+        if nodropout:
+            self.model_config.hidden_dropout_prob = 0.0
+            self.model_config.attention_probs_dropout_prob = 0.0
 
         self.encoder = AutoModel.from_pretrained(self.model_name, config=self.model_config)
+
+        self.freeze = config['freeze_encoder']
         if self.freeze:
             for param in self.encoder.base_model.parameters():
                 param.requires_grad = False
 
         # The output layer that takes the [CLS] representation and gives an output
-        self.cls_layer1 = nn.Linear(self.encoder.config.hidden_size, 128)
+        self.cls_layer1 = nn.Linear(self.encoder.config.hidden_size+features_dim, 128)
         self.relu1 = nn.LeakyReLU()
         self.ff1 = nn.Linear(128, 2)
 
-    def forward(self, input_ids, attention_mask):
+    def forward(self, inputs, attention_mask):
+
+        input_ids = inputs[0]
+        features = inputs[1]
+
+        features = torch.tensor(features).float().to(input_ids.device)
+
+
         # Feed the input to Bert model to obtain contextualized representations
         outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
                                output_hidden_states=False)  # returns a BaseModelOutput object
-
 
         if self.pooling == 'cls':
             # Obtain the representations of [CLS] heads
@@ -60,7 +70,11 @@ class RegressorModel(nn.Module):
             sum_mask = torch.clamp(sum_mask, min=1e-9)
             logits = sum_embeddings / sum_mask
 
-        output = self.cls_layer1(logits)
+
+
+        combined_features = torch.cat((logits, features), dim=1)
+
+        output = self.cls_layer1(combined_features)
         output = self.relu1(output)
         output = self.ff1(output)
         return output
@@ -112,9 +126,11 @@ class Trainer:
         inner_iterations = len(self.train_loader)
 
         idx = 0
-        for input_ids, attention_mask, target in self.train_loader:
+        for el in self.train_loader:
+            input_ids, attention_mask, target = el
+
             with self.accelerator.accumulate(self.model):
-                output = self.model(input_ids=input_ids, attention_mask=attention_mask)
+                output = self.model(inputs=input_ids, attention_mask=attention_mask)
 
                 loss = self.loss_fn(output, target)
                 running_loss += loss.item()
@@ -148,7 +164,7 @@ class Trainer:
 
         idx = 0
         for input_ids, attention_mask, target in self.val_loader:
-            output = self.model(input_ids=input_ids, attention_mask=attention_mask)
+            output = self.model(inputs=input_ids, attention_mask=attention_mask)
 
             loss = self.loss_fn(output, target)
             running_loss += loss.item()

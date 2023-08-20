@@ -10,16 +10,20 @@ from torch.utils.data import Sampler, Dataset, DataLoader
 
 
 class SmartBatchingDataset(Dataset):
-    def __init__(self, df, tokenizer, input_cols, target_cols):
+    def __init__(self, df, tokenizer, input_cols, target_cols, features_cols):
         super(SmartBatchingDataset, self).__init__()
 
         input_df = copy.deepcopy(df[input_cols])
+        features_df = copy.deepcopy(df[features_cols])
 
         # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
         input_df['combined_col'] = input_df.apply(
-            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}', axis=1)
+            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
+            axis=1)
 
-        self._data = input_df['combined_col'].apply(tokenizer.tokenize).apply(tokenizer.convert_tokens_to_ids).to_list()
+        self._data = [
+            input_df['combined_col'].apply(tokenizer.tokenize).apply(tokenizer.convert_tokens_to_ids).to_list(),
+            features_df.values.tolist()]
         self._targets = df[target_cols].values.tolist() if target_cols is not None else None
         self.sampler = None
 
@@ -28,13 +32,14 @@ class SmartBatchingDataset(Dataset):
 
     def __getitem__(self, item):
         if self._targets is not None:
-            return self._data[item], self._targets[item]
+            return [self._data[0][item], self._data[1][item]], self._targets[item]
         else:
-            return self._data[item]
+            return [self._data[0][item], self._data[1][item]]
 
     def get_dataloader(self, batch_size, max_len, pad_id):
+
         self.sampler = SmartBatchingSampler(
-            data_source=self._data,
+            data_source=self._data[0],
             batch_size=batch_size
         )
         collate_fn = SmartBatchingCollate(
@@ -91,16 +96,23 @@ class SmartBatchingCollate:
         else:
             sequences = list(batch)
 
+        ids = []
+        features = []
+        for i in range(len(sequences)):
+            ids.append(sequences[i][0])
+            features.append(sequences[i][1])
+
         input_ids, attention_mask = self.pad_sequence(
-            sequences,
+            ids,
             max_sequence_length=self._max_length,
             pad_token_id=self._pad_token_id
         )
 
+
         if self._targets is not None:
-            output = input_ids, attention_mask, torch.tensor(targets)
+            output = [input_ids, features], attention_mask, torch.tensor(targets)
         else:
-            output = input_ids, attention_mask
+            output = [input_ids, features], attention_mask
         return output
 
     def pad_sequence(self, sequence_batch, max_sequence_length, pad_token_id):

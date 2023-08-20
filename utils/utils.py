@@ -41,6 +41,7 @@ def plot_and_save_graph(epochs, model_name, train_losses, val_losses):
     plt.ylabel('Loss')
     plt.title(model_name)
     plt.legend()
+    plt.grid()
 
     # Save the plot to a file
     plt.savefig(f'./plots/{model_name}.png')
