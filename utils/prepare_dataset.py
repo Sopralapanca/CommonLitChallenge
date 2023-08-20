@@ -4,7 +4,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from transformers import AutoTokenizer
 
-from utils.dynamic_padding import SmartBatchingDataset, SmartBatchingSampler, SmartBatchingCollate
+from utils.dynamic_padding import SmartBatchingDataset
+
 from nltk.stem import PorterStemmer
 from nltk.stem import WordNetLemmatizer
 import nltk
@@ -47,46 +48,28 @@ def preprocessText(text):
 
     return text
 
+def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=False, split=0.2):
+    data_path = "./data/dataset.csv"
+    training_data = pd.read_csv(data_path, sep=',', index_col=0)
 
-class CommonLitDataset(Dataset):
-    def __init__(self, encodings, labels):
-        # Initialize the tokenizer for the desired transformer model
-        self.encodings = encodings
-        # list of target columns
-        self.labels = labels
-
-    def __len__(self):
-        return len(self.labels)
-
-    def __getitem__(self, idx):
-        # item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
-
-        input_ids, attention_mask = self.encodings["input_ids"][idx], self.encodings["attention_mask"][idx]
-        target = torch.tensor(self.labels[idx])
-
-        input_ids = torch.tensor(input_ids)
-        attention_mask = torch.tensor(attention_mask)
-
-        return input_ids, attention_mask, target
-
-
-def pipeline(config, input_cols, target_cols, dynamic_padding, split=0.2):
-    training_data = pd.read_csv("./data/dataset.csv", sep=',', index_col=0)
+    if preprocess_cols:
+        for col in input_cols:
+            training_data[col] = training_data[col].apply(preprocessText)
 
     train, test = train_test_split(training_data, test_size=split, random_state=42)
     train, valid = train_test_split(train, test_size=split, random_state=42)
 
     tokenizer = AutoTokenizer.from_pretrained(config['model'])
 
-    features_cols = ["normalized_text_length","normalized_misspelled_counter",
-                     "normalized_2grams-cooccurence-count","normalized_3grams-cooccurence-count",
-                     "normalized_4grams-cooccurence-count","average_tfidf_score", "length_ratio"]
-   
-    if dynamic_padding:
-        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols, features_cols=features_cols)
+    normalized_col_names = ["length_ratio", "normalized_text_length", "average_tfidf_score",
+                            "normalized_misspelled_counter", "normalized_2grams-cooccurence-count",
+                            "normalized_3grams-cooccurence-count", "normalized_4grams-cooccurence-count"
+                            ]
 
-        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols, features_cols=features_cols)
-        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols, features_cols=features_cols)
+    if dynamic_padding:
+        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
+        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
+        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
 
         train_loader = train_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
                                                 pad_id=tokenizer.pad_token_id)
@@ -94,7 +77,6 @@ def pipeline(config, input_cols, target_cols, dynamic_padding, split=0.2):
                                                 pad_id=tokenizer.pad_token_id)
         test_loader = test_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
                                               pad_id=tokenizer.pad_token_id)
-
     else:
         input_train_df = train[input_cols]
         # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
@@ -131,11 +113,26 @@ def pipeline(config, input_cols, target_cols, dynamic_padding, split=0.2):
         valid_loader = DataLoader(dataset=valid_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
         test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 
-    return train_loader, valid_loader, test_loader, tokenizer, len(features_cols)
-
-    
-    
-    
-    
+    return train_loader, valid_loader, test_loader, tokenizer, len(normalized_col_names)
 
 
+class CommonLitDataset(Dataset):
+    def __init__(self, encodings, labels):
+        # Initialize the tokenizer for the desired transformer model
+        self.encodings = encodings
+        # list of target columns
+        self.labels = labels
+
+    def __len__(self):
+        return len(self.labels)
+
+    def __getitem__(self, idx):
+        # item = {key: torch.tensor(val[idx]) for key, val in self.encodings.items()}
+
+        input_ids, attention_mask = self.encodings["input_ids"][idx], self.encodings["attention_mask"][idx]
+        target = torch.tensor(self.labels[idx])
+
+        input_ids = torch.tensor(input_ids)
+        attention_mask = torch.tensor(attention_mask)
+
+        return input_ids, attention_mask, target
