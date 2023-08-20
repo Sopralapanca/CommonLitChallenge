@@ -1,63 +1,51 @@
-import spacy
 from torch.utils.data import Dataset, DataLoader
 import torch
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from transformers import AutoTokenizer
-import string
-from nltk.stem import PorterStemmer
-from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
-import re
-from sklearn.model_selection import KFold
 
 from utils.dynamic_padding import SmartBatchingDataset, SmartBatchingSampler, SmartBatchingCollate
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+import nltk
+from nltk.corpus import stopwords
+
+nltk.download('stopwords')
+nltk.download('wordnet')
+stop_words = stopwords.words('english')
+lemmatizer = WordNetLemmatizer()
+stemmer = PorterStemmer()
 
 
-def preprocessText(text, intense=False):
-    try:
-        # replace newline with space
-        text = text.replace("\n", " ")
+def preprocessText(text):
+    # replace newline with space
+    text = text.replace("\n", "")
 
-        text = text.replace('\r', '')
-        # Replace curly apostrophe with straight single quote
-        text = text.replace('’', "'")
+    text = text.replace('\r', '')
+    # Replace curly apostrophe with straight single quote
+    text = text.replace('’', "'")
 
-        # Normalize spaces around punctuation marks
-        text = re.sub(r'\s+', ' ', text)
-        text = re.sub(r'\s([.,!?])', r'\1', text)
-        text = re.sub(r'([.,!?])\s', r'\1', text)
-        text = text.strip()
+    # Normalize spaces around punctuation marks
+    text = text.strip()
 
-        if intense:
-            # lower case
-            text = text.lower()
+    # lower case
+    text = text.lower()
 
-            # remove punctuations
-            translator = str.maketrans("", "", string.punctuation)
-            text = text.translate(translator)
+    # split text
+    words = text.split()
 
-            # split text
-            words = text.split()
+    # stop word removal
+    words = [w for w in words if not w in stop_words]
 
-            # stop word removal
-            stop_words = spacy.lang.en.stop_words.STOP_WORDS
-            words = [w for w in words if not w in stop_words]
+    # stemming
+    # words = [stemmer.stem(w) for w in words]
 
-            # stemming
-            stemmer = PorterStemmer()
-            words = [stemmer.stem(w) for w in words]
+    # lemmatization
+    words = [lemmatizer.lemmatize(w) for w in words]
 
-            # lemmatization
-            lemmatizer = WordNetLemmatizer()
-            words = [lemmatizer.lemmatize(w) for w in words]
+    text = ' '.join(words)
 
-            # return pre-processed paragraph text
-            text = ' '.join(words)
-
-        return text
-    except:
-        return text
+    return text
 
 
 class CommonLitDataset(Dataset):
@@ -82,35 +70,23 @@ class CommonLitDataset(Dataset):
         return input_ids, attention_mask, target
 
 
-def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=None, split=0.2):
-    if preprocess_cols is None:
-        preprocess_cols = []
-
-    summaries_train_path = "./data/summaries_train.csv"
-    prompt_train_path = "./data/prompts_train.csv"
-
-    train_data = pd.read_csv(summaries_train_path, sep=',', index_col=0)
-    prompt_data = pd.read_csv(prompt_train_path, sep=',', index_col=0)
-
-    training_data = train_data.merge(prompt_data, on='prompt_id')
-
-    for col in input_cols:
-        # apply preprocessText function to each text column in the dfTrain dataframe
-        if col in preprocess_cols:
-            training_data[col] = training_data[col].apply(lambda x: preprocessText(x, intense=True))
-        else:
-            training_data[col] = training_data[col].apply(lambda x: preprocessText(x))
+def pipeline(config, input_cols, target_cols, dynamic_padding, split=0.2):
+    training_data = pd.read_csv("./data/dataset.csv", sep=',', index_col=0)
 
     train, test = train_test_split(training_data, test_size=split, random_state=42)
     train, valid = train_test_split(train, test_size=split, random_state=42)
 
     tokenizer = AutoTokenizer.from_pretrained(config['model'])
-    print("Tokenization...")
-    if dynamic_padding:
-        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols)
 
-        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols)
-        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols)
+    features_cols = ["normalized_text_length","normalized_misspelled_counter",
+                     "normalized_2grams-cooccurence-count","normalized_3grams-cooccurence-count",
+                     "normalized_4grams-cooccurence-count","average_tfidf_score", "length_ratio"]
+   
+    if dynamic_padding:
+        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols, features_cols=features_cols)
+
+        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols, features_cols=features_cols)
+        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols, features_cols=features_cols)
 
         train_loader = train_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
                                                 pad_id=tokenizer.pad_token_id)
@@ -155,48 +131,8 @@ def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=N
         valid_loader = DataLoader(dataset=valid_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
         test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 
-    return train_loader, valid_loader, test_loader, tokenizer
+    return train_loader, valid_loader, test_loader, tokenizer, len(features_cols)
 
-def tf_pipeline(model, keys, n_folds=5, MAX_LEN=1024):
-    def data_loader():
-        prompt_data = pd.read_csv("/data/prompts_train.csv", sep=',', index_col=0)
-        pd_dataset = pd.read_csv("/data/summaries_train.csv", sep=',', index_col=0)
-        pd_dataset = pd_dataset.merge(prompt_data, on='prompt_id')
-        pd_dataset['labels'] = pd_dataset.apply(lambda row: (row['content'], row['wording']), axis=1)
-        return pd_dataset
-
-    def create_data(prompt_question, summary, score, model, MAX_LEN):
-        input_ids = []
-        attention_mask = []
-        token_type_ids = []
-        folds = []
-        labels = []
-        tokenizer = AutoTokenizer.from_pretrained(model)
-        tok_txt = tokenizer.batch_encode_plus(
-            [(k[0] + " [SEP] " + k[1]) for k in zip(prompt_question,summary)],
-                                        max_length = MAX_LEN,
-                                        padding='max_length',
-                                        truncation=True)
-        for i in range(len(prompt_question)):
-            input_ids.append(tok_txt['input_ids'][i])
-            token_type_ids.append(tok_txt['token_type_ids'])
-            attention_mask.append(tok_txt['attention_mask'][i])
-            folds.append(folds[i])
-            labels.append(score[i])
-        return {"input_ids":input_ids,
-                "token_type_ids":token_type_ids,
-                "attention_mask":attention_mask,
-                "fold":folds
-                }, labels
-    pd_dataset = data_loader()
-    kf = KFold(n_splits=n_folds, random_state=None, shuffle=True)
-    for i, (_, index) in enumerate(kf.split(X=pd_dataset)):
-        pd_dataset.loc[index,'fold'] = i
-    data, labels = create_data(pd_dataset[[keys[0]]].tolist(),
-                               pd_dataset[[keys[1]]].tolist(),
-                               pd_dataset['labels'].tolist(),
-                               model, MAX_LEN)
-    return data, labels
     
     
     

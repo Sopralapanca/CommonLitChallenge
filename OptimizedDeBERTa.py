@@ -6,7 +6,7 @@ import time
 
 config = {
     'model': 'microsoft/deberta-v3-base',
-    'name': 'DeBERTa-dynamic-padding-mean-pooling-nodropout',
+    'name': 'DeBERTa-dynamic-padding-mean-pooling-nodropout-features+TFIDF',
     'max_length': 868,  # "text" field length at max is 867
     'batch_size': 4,  # anything more results in CUDA OOM [for unfreezed encoder] on Kaggle GPU
     'epochs': 20,
