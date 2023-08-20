@@ -1,10 +1,8 @@
 import numpy as np # linear algebra
-import pandas as pd # data processing, CSV file I/O (e.g. pd.read_csv)
 import tensorflow as tf
-from transformers import RobertaTokenizer, DebertaV2Tokenizer, AutoTokenizer, TFAutoModel
+from transformers import TFAutoModel
 from scipy.stats import pearsonr
-import matplotlib.pyplot as plt
-from utils.prepare_dataset import tf_pipeline
+from utils.TF_prepare_dataset import tf_pipeline
 
 config = {
     'model': 'microsoft/deberta-v3-base',
@@ -31,8 +29,8 @@ def mcrmse(y_true, y_pred):
 
 def build_model():
 
-    input__ids = tf.keras.Input(shape=(config['max_lenght'], ), dtype = tf.int32)
-    input__mask = tf.keras.Input(shape=(config['max_lenght'], ), dtype = tf.int32)
+    input__ids = tf.keras.Input(shape=(config['max_length'], ), dtype = tf.int32)
+    input__mask = tf.keras.Input(shape=(config['max_length'], ), dtype = tf.int32)
 
     model = TFAutoModel.from_pretrained(config['model'], trainable=True)
     x = model(input_ids = input__ids,
@@ -74,7 +72,7 @@ class PearsonCallback(tf.keras.callbacks.Callback):
         print("pearsonr_val (from log) =", pearson_corr[0])
         logs["val_pearsonr"] = pearson_corr[0]
 
-data, labels = tf_pipeline(config['model'], config['keys'], config['folds'], config['max_length'])
+data = tf_pipeline(config['model'], config['keys'], config['folds'], config['max_length'])
 
 
 callback_lr = tf.keras.callbacks.LearningRateScheduler(scheduler)
@@ -93,28 +91,24 @@ callback_save = tf.keras.callbacks.ModelCheckpoint(
 
 for fold in range(0, config['folds']):
     results = []
-
-    train_data, train_labels = data[data['fold'] != fold], labels[data['fold'] != fold]
-    val_data_, val_labels_ = data[data['fold'] == fold], labels[data['fold'] == fold]
-
+    train_data = data[data['fold'] != fold]
+    val_data = data[data['fold'] == fold]
+    train_data_, train_data_labels=(np.asarray(train_data['input_ids'].tolist()),
+                                    np.asarray(train_data['attention_mask'].tolist())), train_data['y'].tolist()
+    val_data_, val_data_labels  =(val_data['input_ids'].tolist(),
+                 val_data['attention_mask'].tolist()), val_data['y'].tolist()
     model = build_model()
-    model.fit((np.asarray(train_data['input_ids'][:100]),
-            np.asarray(train_data['attention_mask'][:100]),
-            ),
-            np.asarray(train_labels[:100]),
+    model.fit(np.asarray(train_data_).reshape(5732, 2), train_data_labels,
             epochs = config['epochs'],
             shuffle=True,
             callbacks = [callback_lr,
-                        PearsonCallback(val_data_),
+                        PearsonCallback((val_data_, val_data_labels)),
                         callback_es,
                         callback_save,
                         ],
             batch_size = config['batch_size'],
             validation_data= val_data_
         )
-    results[fold] = model.evaluate((np.asarray(val_data_['input_ids']),
-                              np.asarray(val_data_['attention_mask'])),
-                              np.asarray(val_labels_),
-                              batch_size = config['batch_size'],
-                            )
+    results[fold] = model.evaluate(val_data_,
+                                   batch_size = config['batch_size'])
 print(f"The average result for the folds is {tf.reduce_mean(results)}")
