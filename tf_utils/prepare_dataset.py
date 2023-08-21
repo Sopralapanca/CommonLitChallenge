@@ -10,12 +10,11 @@ def tf_pipeline(model, keys, n_folds=5, MAX_LEN=1024):
         pd_dataset['labels'] = pd_dataset.apply(lambda row: (row['content'], row['wording']), axis=1)
         return pd_dataset
 
-    def create_data(prompt_question, summary, fold, score, model, MAX_LEN):
-        folds = []
-        labels = []
-        input_ids = []
-        attention_mask = []
-        token_type_ids = []
+    def create_data(prompt_question, summary, fold_indicators, score, model, MAX_LEN):
+        folds=[{'labels': [],
+                'input_ids': [],
+                'attention_mask':[],
+                'token_type_ids': []}]
         tokenizer = AutoTokenizer.from_pretrained(model)
         tok_txt = tokenizer.batch_encode_plus(
             [(k[0] + " [SEP] " + k[1]) for k in zip(prompt_question,summary)],
@@ -23,17 +22,12 @@ def tf_pipeline(model, keys, n_folds=5, MAX_LEN=1024):
                                         padding='max_length',
                                         truncation=True)
         for i in range(len(prompt_question)):
-            folds.append(fold[i])
-            labels.append(score[i])
-            input_ids.append(tok_txt['input_ids'][i])
-            token_type_ids.append(tok_txt['token_type_ids'])
-            attention_mask.append(tok_txt['attention_mask'][i])
-        return pd.DataFrame(
-                {"input_ids":input_ids,
-                "token_type_ids":token_type_ids,
-                "attention_mask":attention_mask,
-                "y":labels,
-                "fold":folds})
+            folds[fold_indicators[i]['labels'].append(score[i])]
+            folds[fold_indicators[i]['input_ids'].append(tok_txt['input_ids'][i])]
+            folds[fold_indicators[i]['token_type_ids'].append(tok_txt['token_type_ids'][i])]
+            folds[fold_indicators[i]['attention_mask'].append(tok_txt['attention_mask'][i])]
+        return folds
+    
     pd_dataset = data_loader()
     kf = KFold(n_splits=n_folds, random_state=None, shuffle=True)
     for i, (_, index) in enumerate(kf.split(X=pd_dataset)):

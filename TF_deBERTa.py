@@ -2,7 +2,7 @@ import numpy as np # linear algebra
 import tensorflow as tf
 from transformers import TFAutoModel
 from scipy.stats import pearsonr
-from utils.TF_prepare_dataset import tf_pipeline
+from tf_utils.prepare_dataset import tf_pipeline
 
 config = {
     'model': 'microsoft/deberta-v3-base',
@@ -91,24 +91,25 @@ callback_save = tf.keras.callbacks.ModelCheckpoint(
 
 for fold in range(0, config['folds']):
     results = []
-    train_data = data[data['fold'] != fold]
-    val_data = data[data['fold'] == fold]
-    train_data_, train_data_labels=(np.asarray(train_data['input_ids'].tolist()),
-                                    np.asarray(train_data['attention_mask'].tolist())), train_data['y'].tolist()
-    val_data_, val_data_labels  =(val_data['input_ids'].tolist(),
-                 val_data['attention_mask'].tolist()), val_data['y'].tolist()
-    model = build_model()
-    model.fit(np.asarray(train_data_).reshape(5732, 2), train_data_labels,
-            epochs = config['epochs'],
-            shuffle=True,
-            callbacks = [callback_lr,
-                        PearsonCallback((val_data_, val_data_labels)),
-                        callback_es,
-                        callback_save,
-                        ],
-            batch_size = config['batch_size'],
-            validation_data= val_data_
-        )
-    results[fold] = model.evaluate(val_data_,
-                                   batch_size = config['batch_size'])
-print(f"The average result for the folds is {tf.reduce_mean(results)}")
+    train_data = [x for i,x in enumerate(data) if i!=fold]
+    val_data = data[fold]
+    print(train_data)
+#     train_data_, train_data_labels=(np.asarray(train_data['input_ids'].tolist()),
+#                                     np.asarray(train_data['attention_mask'].tolist())), train_data['y'].tolist()
+#     val_data_, val_data_labels  =(val_data['input_ids'].tolist(),
+#                  val_data['attention_mask'].tolist()), val_data['y'].tolist()
+#     model = build_model()
+#     model.fit(np.asarray(train_data_).reshape(5732, 2), train_data_labels,
+#             epochs = config['epochs'],
+#             shuffle=True,
+#             callbacks = [callback_lr,
+#                         PearsonCallback((val_data_, val_data_labels)),
+#                         callback_es,
+#                         callback_save,
+#                         ],
+#             batch_size = config['batch_size'],
+#             validation_data= val_data_
+#         )
+#     results[fold] = model.evaluate(val_data_,
+#                                    batch_size = config['batch_size'])
+# print(f"The average result for the folds is {tf.reduce_mean(results)}")
