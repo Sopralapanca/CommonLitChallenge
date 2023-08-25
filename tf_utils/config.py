@@ -1,7 +1,7 @@
 CONFIG = {
     'model': 'microsoft/deberta-v3-base',
     'dropout': 0.5,
-    'max_length': 1024,
+    'max_length': 512,
     'batch_size': 2,  # anything more results in CUDA OOM [for unfreezed encoder] on Kaggle GPU
     'epochs': 1,
     'lr': 3e-4,

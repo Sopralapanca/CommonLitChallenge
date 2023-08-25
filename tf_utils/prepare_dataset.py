@@ -3,7 +3,7 @@ from transformers import AutoTokenizer
 from sklearn.model_selection import KFold
 from tf_utils.config import CONFIG
 
-def tf_pipeline(model, keys, n_folds=5, MAX_LEN=1024):
+def tf_deBERTa_pipeline(model, keys, n_folds=5, MAX_LEN=1024):
     def data_loader():
         prompt_data = pd.read_csv("data/prompts_train.csv", sep=',', index_col=0)
         pd_dataset = pd.read_csv("data/summaries_train.csv", sep=',', index_col=0)
