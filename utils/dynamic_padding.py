@@ -1,13 +1,9 @@
 import copy
-import random
 import numpy as np
-import multiprocessing
 import more_itertools
 
 import torch
-import torch.nn as nn
 from torch.utils.data import Sampler, Dataset, DataLoader
-
 
 class SmartBatchingDataset(Dataset):
     def __init__(self, df, tokenizer, input_cols, target_cols, features_cols):
@@ -52,7 +48,8 @@ class SmartBatchingDataset(Dataset):
             batch_size=batch_size,
             sampler=self.sampler,
             collate_fn=collate_fn,
-            pin_memory=True
+            pin_memory=True,
+            num_workers=1 # calcolare grafico con i tempi impiegati per capire qual è il numero di worker migliore da utilizzare
         )
         return dataloader
 
@@ -107,7 +104,6 @@ class SmartBatchingCollate:
             max_sequence_length=self._max_length,
             pad_token_id=self._pad_token_id
         )
-
 
         if self._targets is not None:
             output = [input_ids, features], attention_mask, torch.tensor(targets)

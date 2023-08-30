@@ -6,7 +6,7 @@ import time
 
 config = {
     'model': 'microsoft/deberta-v3-base',
-    'name': 'DeBERTa-dynamic-padding-mean-pooling-nodropout-features+TFIDF',
+    'name': 'DeBERTa-newdataset',
     'max_length': 868,  # "text" field length at max is 867
     'batch_size': 4,  # anything more results in CUDA OOM [for unfreezed encoder] on Kaggle GPU
     'epochs': 20,
@@ -18,10 +18,16 @@ config = {
     'freeze_encoder': True
 }
 
-input_cols = ["text"]
+input_cols = ["fixed_summary_text"]
 target_cols = ["content", "wording"]
-train_loader, valid_loader, test_loader, tokenizer, feature_dim = pipeline(config, input_cols=input_cols, target_cols=target_cols,
-                                                              dynamic_padding=True, split=0.2)
+features = ["length_ratio", "normalized_text_length", "karp_tfidf_scores",
+            "normalized_text_misspelled_counter", "normalized_corrected_misspelled_counter", "normalized_2grams-cooccurrence-count",
+            "normalized_2grams-correct-count", "normalized_3grams-correct-count", "normalized_4grams-correct-count",
+            "normalized_3grams-cooccurrence-count", "normalized_4grams-cooccurrence-count",
+            "semantic_similarity"]
+feature_dim = len(features)
+train_loader, valid_loader, test_loader, tokenizer = pipeline(config, input_cols=input_cols, target_cols=target_cols,
+                                                                           features=features, dynamic_padding=True, split=0.2)
 
 accelerator = Accelerator(gradient_accumulation_steps=config['gradient_accumulation_steps'])
 

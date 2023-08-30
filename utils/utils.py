@@ -27,7 +27,7 @@ def get_least_utilized_gpu():
     print(device)
     return device
 
-def plot_and_save_graph(epochs, model_name, train_losses, val_losses):
+def plot_and_save_graph(epochs, model_name, train_losses, val_losses, show=False):
     # Create the plot
     plt.figure(figsize=(10, 6))
 
@@ -47,18 +47,23 @@ def plot_and_save_graph(epochs, model_name, train_losses, val_losses):
     plt.savefig(f'./plots/{model_name}.png')
 
     # Display the plot
-    plt.show()
+    if show:
+        plt.show()
 
 
 def save_results(model_name, train_losses, val_losses, elapsed_time):
     training_info = {
         'model-name': model_name,
-        'train-loss': train_losses[-1],
-        'valid-loss': val_losses[-1],
+        'train-loss': train_losses["loss"][-1],
+        'valid-loss': val_losses["loss"][-1],
+        'train-content-loss': train_losses["content"][-1],
+        'valid-content-loss': val_losses["content"][-1],
+        'train-wording-loss': train_losses["wording"][-1],
+        'valid-wording-loss': val_losses["wording"][-1],
         'elapsed-time': elapsed_time,
     }
 
-    csv_filename = 'training_info.csv'
+    csv_filename = 'training_info2.csv'
 
     with open(csv_filename, 'a', newline='') as csvfile:
         fieldnames = training_info.keys()

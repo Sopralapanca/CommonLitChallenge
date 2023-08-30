@@ -11,6 +11,8 @@ from nltk.stem import WordNetLemmatizer
 import nltk
 from nltk.corpus import stopwords
 
+
+
 nltk.download('stopwords')
 nltk.download('wordnet')
 stop_words = stopwords.words('english')
@@ -48,28 +50,56 @@ def preprocessText(text):
 
     return text
 
-def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=False, split=0.2):
+
+def oversample_df(df):
+    """
+
+    :param df: Dataframe to be overampled based on prompt_id
+    :return: Dataframe oversampled
+    """
+    classes = df["prompt_id"].value_counts().to_dict()
+    most = max(classes.values())
+    classes_list = []
+    for key in classes:
+        classes_list.append(df[df["prompt_id"] == key])
+    classes_sample = []
+    for i in range(1, len(classes_list)):
+        classes_sample.append(classes_list[i].sample(most, replace=True))
+    df_maybe = pd.concat(classes_sample)
+    final_df = pd.concat([df_maybe, classes_list[0]], axis=0)
+
+    return final_df
+
+
+def pipeline(config, input_cols, target_cols, dynamic_padding, features, split=0.2, oversample=False):
+    """
+    :param config:          model configuration dictionary
+    :param input_cols:      list of strings defining the columns of the dataframe that needs to be input of the LLM
+    :param target_cols:     list of strings defining the columns of the dataframe for the target
+    :param dynamic_padding:
+    :param features:        list of strings defining the columns of the dataframe that rapresent the added feature to be concatenated as input to the feedforward net
+    :param split:           float, percentage of the size of the validation set and test set
+    :param oversample:      boolean, if true the training set will be oversampled
+    :return:                training, validation, test loaders and the tokenizer used
+    """
+
     data_path = "./data/dataset.csv"
     training_data = pd.read_csv(data_path, sep=',', index_col=0)
 
-    if preprocess_cols:
-        for col in input_cols:
-            training_data[col] = training_data[col].apply(preprocessText)
+    training_data.reset_index(inplace=True)
 
-    train, test = train_test_split(training_data, test_size=split, random_state=42)
-    train, valid = train_test_split(train, test_size=split, random_state=42)
+    train, test = train_test_split(training_data, test_size=split, random_state=42, stratify=training_data["prompt_id"])
+    train, valid = train_test_split(train, test_size=split, random_state=42, stratify=train["prompt_id"])
+
+    if oversample:
+        train = oversample_df(train)
 
     tokenizer = AutoTokenizer.from_pretrained(config['model'])
 
-    normalized_col_names = ["length_ratio", "normalized_text_length", "average_tfidf_score",
-                            "normalized_misspelled_counter", "normalized_2grams-cooccurence-count",
-                            "normalized_3grams-cooccurence-count", "normalized_4grams-cooccurence-count"
-                            ]
-
     if dynamic_padding:
-        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
-        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
-        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols, features_cols=normalized_col_names)
+        train_set = SmartBatchingDataset(train, tokenizer, input_cols, target_cols, features_cols=features)
+        valid_set = SmartBatchingDataset(valid, tokenizer, input_cols, target_cols, features_cols=features)
+        test_set = SmartBatchingDataset(test, tokenizer, input_cols, target_cols, features_cols=features)
 
         train_loader = train_set.get_dataloader(batch_size=config['batch_size'], max_len=config["max_length"],
                                                 pad_id=tokenizer.pad_token_id)
@@ -113,7 +143,7 @@ def pipeline(config, input_cols, target_cols, dynamic_padding, preprocess_cols=F
         valid_loader = DataLoader(dataset=valid_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
         test_loader = DataLoader(dataset=test_set, batch_size=config['batch_size'], shuffle=True, pin_memory=True)
 
-    return train_loader, valid_loader, test_loader, tokenizer, len(normalized_col_names)
+    return train_loader, valid_loader, test_loader, tokenizer
 
 
 class CommonLitDataset(Dataset):
