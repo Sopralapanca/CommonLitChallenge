@@ -50,6 +50,7 @@ def plot_and_save_graph(epochs, model_name, train_losses, val_losses, show=False
     if show:
         plt.show()
 
+    plt.close()
 
 def save_results(model_name, train_losses, val_losses, elapsed_time):
     training_info = {

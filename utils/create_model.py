@@ -4,17 +4,32 @@ import torch
 import gc
 import numpy as np
 
+
 class EarlyStopper:
-    def __init__(self, patience=1, min_delta=0.0):
+    def __init__(self, checkpoint_path="", patience=5, min_delta=0.003):
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
         self.min_validation_loss = np.inf
+        self.checkpoint_path = checkpoint_path
 
-    def early_stop(self, validation_loss):
+    def early_stop(self, validation_loss, epoch, optimizer, model):
         if validation_loss < self.min_validation_loss:
             self.min_validation_loss = validation_loss
             self.counter = 0
+            name = f"checkpoint.pt"
+            full_path = self.checkpoint_path + name
+
+            #print(f"New best validation loss, saving checkpoint at {full_path}")
+
+            torch.save({
+                'epoch': epoch,
+                'model_state_dict': model.state_dict(),
+                'optimizer_state_dict': optimizer.state_dict(),
+                'loss': validation_loss,
+            }, full_path)
+
+
         elif validation_loss > (self.min_validation_loss + self.min_delta):
             self.counter += 1
             if self.counter >= self.patience:
@@ -25,7 +40,7 @@ class EarlyStopper:
 class RegressorModel(nn.Module):
     def __init__(self, name, fflayers, ffdropout,
                  features_dim, target_cols, activation_function,
-                 freeze_encoder=True,pooling="mean-pooling", dropoutLLM=True):
+                 freeze_encoder=True, pooling="mean-pooling", dropoutLLM=True):
         """
         :param name:                strings, model name to be downloaded with huggingsface transformers
         :param fflayers:            int, number of layers of the feedforward network
@@ -38,7 +53,6 @@ class RegressorModel(nn.Module):
         :param dropoutLLM:          boolean, if False dropout percentage of LLM will be setted to 0
         """
 
-
         super(RegressorModel, self).__init__()
         self.model_name = name
         self.pooling = pooling
@@ -46,7 +60,6 @@ class RegressorModel(nn.Module):
         self.target_cols = target_cols
         self.drop = nn.Dropout(p=ffdropout)
         self.fflayers = fflayers
-
 
         if dropoutLLM:
             self.model_config.hidden_dropout_prob = 0.0
@@ -60,12 +73,12 @@ class RegressorModel(nn.Module):
 
         size = self.encoder.config.hidden_size + features_dim
         # The output layer that takes the last hidden layer of the BERT model
-        self.cls_layer1 = nn.Linear(size, 2*size)
+        self.cls_layer1 = nn.Linear(size, 2 * size)
 
         self.ff_hidden_layers = nn.ModuleList()
-        size = 2*size
+        size = 2 * size
         for _ in range(self.fflayers):
-            out_size = int(size/2)
+            out_size = int(size / 2)
             self.ff_hidden_layers.append(nn.Linear(size, out_size))
             size = out_size
 
@@ -86,7 +99,6 @@ class RegressorModel(nn.Module):
 
         features = torch.tensor(features).float().to(input_ids.device)
 
-
         # Feed the input to Bert model to obtain contextualized representations
         outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
                                output_hidden_states=False)  # returns a BaseModelOutput object
@@ -103,11 +115,10 @@ class RegressorModel(nn.Module):
             sum_mask = torch.clamp(sum_mask, min=1e-9)
             logits = sum_embeddings / sum_mask
 
-
         combined_features = torch.cat((logits, features), dim=1)
 
         output = self.drop(combined_features)
-        output = self.cls_layer1(output)
+        output = self.act(self.cls_layer1(output))
 
         for layer in self.ff_hidden_layers:
             output = self.act(layer(output))
@@ -117,7 +128,7 @@ class RegressorModel(nn.Module):
 
 
 class Trainer:
-    def __init__(self, model, loaders, epochs, accelerator, lr):
+    def __init__(self, model, loaders, epochs, accelerator, lr, weight_decay):
 
         """
         :param model:       PyTorch model to train
@@ -127,10 +138,11 @@ class Trainer:
         :param lr:          float, learning rate
         """
 
-
         self.model = model
         self.train_loader, self.val_loader = loaders
-        #self.config = config
+        self.weight_decay = weight_decay
+
+        # self.config = config
         # self.input_keys = ['input_ids', 'token_type_ids', 'attention_mask']
 
         self.epochs = epochs
@@ -154,7 +166,6 @@ class Trainer:
             "wording": []
         }
 
-
     def prepare(self):
         self.model, self.optim, self.train_loader, self.val_loader, self.scheduler = self.accelerator.prepare(
             self.model,
@@ -168,7 +179,7 @@ class Trainer:
         no_decay = ['bias', 'LayerNorm.weight']
         optimizer_grouped_parameters = [
             {'params': [p for n, p in self.model.named_parameters() if not any(nd in n for nd in no_decay)],
-             'weight_decay': 0.01},
+             'weight_decay': self.weight_decay},
             {'params': [p for n, p in self.model.named_parameters() if any(nd in n for nd in no_decay)],
              'weight_decay': 0.0}
         ]
@@ -176,7 +187,7 @@ class Trainer:
         return optimizer
 
     def loss_fn(self, outputs, targets, multioutput=True):
-        colwise_rmse = torch.sqrt(torch.mean((targets-outputs)**2, dim=0))
+        colwise_rmse = torch.sqrt(torch.mean((targets - outputs) ** 2, dim=0))
         if multioutput:
             content_loss = colwise_rmse[0]
             wording_loss = colwise_rmse[1]
@@ -282,14 +293,14 @@ class Trainer:
         preds = torch.concat(preds)
         return preds
 
-    def fit(self, multioutput=True, verbose=True):
+    def fit(self, multioutput=True, min_delta=0.003, verbose=True):
 
         self.prepare()
 
         # Define the number of iterations for both loops
         outer_iterations = self.epochs
 
-        early_stopper = EarlyStopper(patience=5, min_delta=0.03)
+        early_stopper = EarlyStopper(patience=3, min_delta=min_delta)
         outer_progress = ""
 
         # Create outer progress bar
@@ -307,7 +318,8 @@ class Trainer:
 
             self.clear()
 
-            if early_stopper.early_stop(self.val_losses["loss"][-1]):
+            if early_stopper.early_stop(validation_loss=self.val_losses["loss"][-1],
+                                        epoch=epoch, optimizer=self.optim, model=self.model):
                 break
 
             if verbose:
