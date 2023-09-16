@@ -16,15 +16,15 @@ def model_selection(config, model_name, max_epochs, features_dim, target_cols):
     combinations = it.product(*(config[key] for key in keys))
     param_list = list(combinations)
 
-    # Specify the number of random combinations you want to select
-    num_random_combinations = 70  # You can change this to the desired number
 
+    # Specify the number of random combinations you want to select
+    num_random_combinations = 70 if len(param_list) > 70 else len(param_list)
     # Select random combinations without replacement
     random_combinations = random.sample(param_list, num_random_combinations)
 
 
     for i, elem in enumerate(random_combinations):
-        id = i + 270
+        id = i + 340
         results_row = {}
         for k, v in zip(keys, elem):
             results_row[k] = v
@@ -47,7 +47,7 @@ def model_selection(config, model_name, max_epochs, features_dim, target_cols):
                             train_losses["loss"], val_losses["loss"])
 
         results_row['id'] = id
-        results_row['model-name'] = "bert-base-cased"
+        results_row['model-name'] = "DeBERTa-question+fixedsummarytext"
         results_row['train-loss'] = train_losses["loss"][-1]
         results_row['valid-loss'] = val_losses["loss"][-1]
         results_row['train-content-loss'] = train_losses["content"][-1].item()
@@ -77,8 +77,8 @@ def model_selection(config, model_name, max_epochs, features_dim, target_cols):
 # Token Length: 867
 
 config = {
-    'model': 'bert-base-cased',
-    'max_length': 512,
+    'model': 'microsoft/deberta-v3-base',
+    'max_length': 1024,
     'batch_size': 4,  # anything more results in CUDA OOM [for unfreezed encoder] on Kaggle GPU
 }
 
@@ -89,21 +89,21 @@ features = ["text_length","karp_tfidf_scores","summary_word_counter",
 feature_dim = len(features)
 multioutput = True
 
-input_cols = ["fixed_summary_text"]
+input_cols = ["prompt_question", "fixed_summary_text"]
 target_cols = ["content", "wording"]
 
 train_loader, valid_loader, test_loader, tokenizer = pipeline(config, input_cols=input_cols, target_cols=target_cols,
                                                               features=features, dynamic_padding=True, split=0.2,
                                                               oversample=True)
 
-model_name = 'bert-base-cased'
+model_name = 'microsoft/deberta-v3-base'
 max_epochs = 100
 
 model_selection_config = {
-    'lr': np.arange(7e-4, 5e-3, 0.0002).tolist(),
+    'lr': np.arange(7e-4, 1e-3, 0.0001).tolist(),
     'fflayers': [1, 2, 3],
-    'ffdropout': [0.05, 0.1, 0.2],
+    'ffdropout': [0.05, 0.1],
     'activation_function': ["relu"],
-    'weight_decay': [0.01, 0.001, 0.0001]
+    'weight_decay': [0.0001, 0.0005, 0.001, 0.005, 0.01]
 }
 model_selection(model_selection_config, model_name, max_epochs, features_dim=feature_dim, target_cols=target_cols)
