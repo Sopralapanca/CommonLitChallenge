@@ -39,13 +39,3 @@ and more
 
 The dataset preparation is in the file `Correction+POS+NER+PrepareDataset.ipynb`
 The code for the final model is in `TrainLLM.ipynb`.
-
-**Results**
-
-| Model   | Validation Set | Internal Test Set | Public Test Set   |
-|---------|----------------|-------------------| ------------------|
-| RNN     | Content Cell   | Content Cell      | Content Cell      |
-| BERT    | Content Cell   | Content Cell      | Content Cell      |
-| BERT+FE | Content Cell   | Content Cell      | Content Cell      |
-| DeBERTa | Content Cell   | Content Cell      | Content Cell      |
-| DeBERTa+FE | Content Cell   | Content Cell      | Content Cell      |
