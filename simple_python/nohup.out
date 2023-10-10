@@ -1,0 +1,1312 @@
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+/storagenfs/g.carfi1/.virtualenvs/CommonLitChallenge/lib/python3.8/site-packages/transformers/convert_slow_tokenizer.py:470: UserWarning: The sentencepiece tokenizer that you are converting to a fast tokenizer uses the byte fallback option which is not implemented in the fast tokenizers. In practice this means that the fast version of the tokenizer can produce unknown tokens whereas the sentencepiece version would have converted these unknown tokens into a sequence of byte tokens matching the original piece of text.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+648
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+/storagenfs/g.carfi1/.virtualenvs/CommonLitChallenge/lib/python3.8/site-packages/transformers/convert_slow_tokenizer.py:470: UserWarning: The sentencepiece tokenizer that you are converting to a fast tokenizer uses the byte fallback option which is not implemented in the fast tokenizers. In practice this means that the fast version of the tokenizer can produce unknown tokens whereas the sentencepiece version would have converted these unknown tokens into a sequence of byte tokens matching the original piece of text.
+  warnings.warn(
+Special tokens have been added in the vocabulary, make sure the associated word embeddings are fine-tuned or trained.
+48
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt
+New best local validation loss
+New best validation loss, saving checkpoint at _checkpoint.pt

@@ -24,7 +24,7 @@ class SmartBatchingDataset(Dataset):
 
         # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
         input_df['combined_col'] = input_df.apply(
-            lambda row: tokenizer.cls_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
+            lambda row: tokenizer.bos_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.eos_token}',
             axis=1)
 
         self._data = [
@@ -180,9 +180,12 @@ class RegressorModel(nn.Module):
         if not dropoutLLM:
             self.model_config.hidden_dropout_prob = 0.0
             self.model_config.attention_probs_dropout_prob = 0.0
-
         self.encoder = AutoModel.from_pretrained(f"{name}", config=self.model_config)
-
+        params_dict = self.encoder.state_dict()
+        param_names = params_dict.keys()
+        for name, param in zip(param_names, self.encoder.base_model.parameters()):
+            if 'dense' not in name:
+                param.requires_grad = False
         if freeze_encoder:
             for param in self.encoder.base_model.parameters():
                 param.requires_grad = False
@@ -286,27 +289,26 @@ class RegressorModel(nn.Module):
     
 """# Training Loop"""
 class EarlyStopper:
-    def __init__(self, checkpoint_path="", patience=5, min_delta=0.003, general_min_validation=np.inf):
+    def __init__(self, checkpoint_path="", patience=8, min_delta=0.003, general_min_validation=np.inf, model_name=''):
         self.patience = patience
         self.min_delta = min_delta
         self.counter = 0
         self.min_validation_loss = np.inf
         self.checkpoint_path = checkpoint_path
         self.general_min_validation = general_min_validation
+        self.model_name = model_name
 
     def early_stop(self, validation_loss, epoch, optimizer, model):
         if validation_loss < self.min_validation_loss:
             self.min_validation_loss = validation_loss
             self.counter = 0
-            name = f"checkpoint.pt"
+            name = f"{self.model_name}_checkpoint.pt"
             full_path = self.checkpoint_path + name
             print('New best local validation loss')
 
             if validation_loss < self.general_min_validation:
                 self.general_min_validation = validation_loss
                 self.counter = 0
-                name = f"checkpoint.pt"
-                full_path =  self.checkpoint_path + name
 
                 print(f"New best validation loss, saving checkpoint at {full_path}")
 
@@ -324,7 +326,7 @@ class EarlyStopper:
         return False
 
 class Trainer:
-    def __init__(self, model, loaders, epochs, accelerator, lr, weight_decay):
+    def __init__(self, model, loaders, epochs, accelerator, weight_decay, name='', base_lr=1e-5, max_lr=1e-3, step_size_up=1000, step_size_down=1000):
 
         """
         :param model:       PyTorch model to train
@@ -343,11 +345,15 @@ class Trainer:
 
         self.accelerator = accelerator
 
-        self.lr = lr
+        self.lr = base_lr
 
         self.optim = self._get_optim()
 
-        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optim, T_0=5, eta_min=1e-7)
+        self.scheduler = torch.optim.lr_scheduler.CyclicLR(self.optim, base_lr=base_lr, max_lr=max_lr, 
+                                                           step_size_up=step_size_up, step_size_down=step_size_down, 
+                                                           mode='triangular', cycle_momentum=False)
+
+        self.name = name
 
         self.train_losses = {
             "loss": [],
@@ -477,14 +483,14 @@ class Trainer:
             inner_progress = f"Validation Batch:[{idx}/{inner_iterations}] training loss: {self.train_losses['loss'][-1]} validation loss: {self.val_losses['loss'][-1]}"
             print(f"\r{outer_progress} {inner_progress}", end="")
 
-    def fit(self, multioutput=True, min_delta=0.003, verbose=True, best_validation=np.inf):
+    def fit(self, multioutput=True, min_delta=0.003, verbose=False, best_validation=np.inf, patience=5):
 
         self.prepare()
 
         # Define the number of iterations for both loops
         outer_iterations = self.epochs
 
-        early_stopper = EarlyStopper(patience=5, min_delta=min_delta, general_min_validation=best_validation)
+        early_stopper = EarlyStopper(patience=patience, min_delta=min_delta, general_min_validation=best_validation, model_name=self.name)
         outer_progress = ""
 
         # Create outer progress bar
@@ -535,3 +541,29 @@ def oversample_df(df):
   final_df = pd.concat([df_maybe, classes_list[0]], axis=0)
 
   return final_df
+
+
+def evaluate(test_loader, model, device, trainer):
+    preds = []
+    running_loss = 0.
+    for el in test_loader:
+        input_ids, attention_mask, target = el
+
+        attention_mask = attention_mask.to(device)
+        target = target.to(device)
+
+        ids = input_ids[0].to(device)
+        inputs = [ids, input_ids[1]]
+
+        output = model(inputs=inputs, attention_mask=attention_mask)
+        loss, content_loss, wording_loss = trainer.loss_fn(output, target, False)
+        running_loss += loss.item()
+
+        preds.append(output)
+
+        del input_ids, attention_mask, target, loss, ids, inputs, output
+
+    test_loss = running_loss / len(test_loader)
+    print("Test Loss:", test_loss)
+    preds = torch.concat(preds)
+    return preds, test_loss
