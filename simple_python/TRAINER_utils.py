@@ -24,7 +24,7 @@ class SmartBatchingDataset(Dataset):
 
         # Combine strings from multiple columns with [CLS], [SEP], and [SEP] separators
         input_df['combined_col'] = input_df.apply(
-            lambda row: tokenizer.bos_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.eos_token}',
+            lambda row: tokenizer.sep_token + ' ' + f' {tokenizer.sep_token} '.join(row) + f' {tokenizer.sep_token}',
             axis=1)
 
         self._data = [
@@ -126,9 +126,6 @@ class SmartBatchingCollate:
         padded_sequences, attention_masks = [[] for i in range(2)]
         attend, no_attend = 1, 0
         for sequence in sequence_batch:
-
-
-
             # As discussed above, truncate if exceeds max_len
             new_sequence = list(sequence[:max_len])
 
@@ -170,12 +167,9 @@ class RegressorModel(nn.Module):
         self.model_name = name
         self.pooling = pooling
         self.model_config = AutoConfig.from_pretrained(self.model_name)
-        if pooling == 'combination':
-            self.model_config.update({'output_hidden_states':True})
         self.target_cols = target_cols
         self.drop = nn.Dropout(p=ffdropout)
         self.fflayers = fflayers
-
 
         if not dropoutLLM:
             self.model_config.hidden_dropout_prob = 0.0
@@ -190,9 +184,7 @@ class RegressorModel(nn.Module):
             for param in self.encoder.base_model.parameters():
                 param.requires_grad = False
         
-        size = self.encoder.config.hidden_size + features_dim
-        if self.pooling == 'combination':
-          size = self.encoder.config.hidden_size*4 + features_dim
+        size = self.encoder.config.hidden_size + features_dim + 767  # The latter is the dimension of the prompt_text embedding
         # The output layer that takes the last hidden layer of the BERT model
         self.cls_layer1 = nn.Linear(size, 2*size)
 
@@ -224,46 +216,22 @@ class RegressorModel(nn.Module):
 
         input_ids = inputs[0]
         features = inputs[1]
-
+        embeddings =  torch.empty(size=(len(features), 768)).to(input_ids.device)
+        for i, feature in enumerate(features):
+            embeddings[i] = feature.pop()
+        
         features = torch.tensor(features).float().to(input_ids.device)
 
         if self.pooling == 'cls':
+        # Feed the input to Bert model to obtain contextualized representations
           with torch.no_grad():
             outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
                                 output_hidden_states=False)
           # Obtain the representations of [CLS] heads
           logits = outputs.last_hidden_state[:, 0, :]
 
-        # Feed the input to Bert model to obtain contextualized representations
-        if self.pooling == 'combination': 
-          with torch.no_grad():
-            outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
-          all_hidden_states = torch.stack(outputs[2])
-          input_mask_expanded = attention_mask.unsqueeze(-1).expand(all_hidden_states[-1].size()).float()
-          sum_embeddings = torch.sum(all_hidden_states[-1] * input_mask_expanded, 1)
-          sum_mask = input_mask_expanded.sum(1)
-          sum_mask = torch.clamp(sum_mask, min=1e-9)
-          logits_1 = sum_embeddings / sum_mask
-          input_mask_expanded = attention_mask.unsqueeze(-1).expand(all_hidden_states[-2].size()).float()
-          sum_embeddings = torch.sum(all_hidden_states[-2] * input_mask_expanded, 1)
-          sum_mask = input_mask_expanded.sum(1)
-          sum_mask = torch.clamp(sum_mask, min=1e-9)
-          logits_2 = sum_embeddings / sum_mask
-          input_mask_expanded = attention_mask.unsqueeze(-1).expand(all_hidden_states[-3].size()).float()
-          sum_embeddings = torch.sum(all_hidden_states[-3] * input_mask_expanded, 1)
-          sum_mask = input_mask_expanded.sum(1)
-          sum_mask = torch.clamp(sum_mask, min=1e-9)
-          logits_3 = sum_embeddings / sum_mask
-          input_mask_expanded = attention_mask.unsqueeze(-1).expand(all_hidden_states[-4].size()).float()
-          sum_embeddings = torch.sum(all_hidden_states[-4] * input_mask_expanded, 1)
-          sum_mask = input_mask_expanded.sum(1)
-          sum_mask = torch.clamp(sum_mask, min=1e-9)
-          logits_4 = sum_embeddings / sum_mask
-          logits = torch.cat((logits_1, logits_2, logits_3, logits_4),-1)
-
-        #   logits  = concatenate_pooling[:, 0]
-
         if self.pooling == 'mean-pooling':
+        # Feed the input to Bert model to obtain contextualized representations
           with torch.no_grad():
             outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask,
                                   output_hidden_states=False)
@@ -272,14 +240,13 @@ class RegressorModel(nn.Module):
           sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, 1)
           sum_mask = input_mask_expanded.sum(1)
           sum_mask = torch.clamp(sum_mask, min=1e-9)
+          # Obtain the representations of [CLS] heads
           logits = sum_embeddings / sum_mask
 
-
-        combined_features = torch.cat((logits, features), dim=1) # combine bert embeddings with features extracted from the dataset
+        combined_features = torch.cat((logits, features, embeddings), dim=1) # combine bert embeddings with features extracted from the dataset
 
         output = self.drop(combined_features)
         output = self.act(self.cls_layer1(output))
-
 
         for hl in self.ff_hidden_layers:
             output = self.act(hl(output))
@@ -304,20 +271,19 @@ class EarlyStopper:
             self.counter = 0
             name = f"{self.model_name}_checkpoint.pt"
             full_path = self.checkpoint_path + name
-            print('New best local validation loss')
 
             if validation_loss < self.general_min_validation:
                 self.general_min_validation = validation_loss
                 self.counter = 0
 
-                print(f"New best validation loss, saving checkpoint at {full_path}")
+                # print(f"New best validation loss, saving checkpoint at {full_path}")
 
-                torch.save({
-                    'epoch': epoch,
-                    'model_state_dict': model.state_dict(),
-                    'optimizer_state_dict': optimizer.state_dict(),
-                    'loss': validation_loss,
-                }, full_path)
+                # torch.save({
+                #     'epoch': epoch,
+                #     'model_state_dict': model.state_dict(),
+                #     'optimizer_state_dict': optimizer.state_dict(),
+                #     'loss': validation_loss,
+                # }, full_path)
               
         elif validation_loss > (self.min_validation_loss + self.min_delta):
             self.counter += 1
@@ -326,7 +292,7 @@ class EarlyStopper:
         return False
 
 class Trainer:
-    def __init__(self, model, loaders, epochs, accelerator, weight_decay, name='', base_lr=1e-5, max_lr=1e-3, step_size_up=1000, step_size_down=1000):
+    def __init__(self, model, loaders, epochs, accelerator, weight_decay, name='', lr=1e-5, max_lr=1e-3, step_size_up=1000, step_size_down=1000):
 
         """
         :param model:       PyTorch model to train
@@ -345,13 +311,15 @@ class Trainer:
 
         self.accelerator = accelerator
 
-        self.lr = base_lr
+        self.lr = lr
 
         self.optim = self._get_optim()
+        
+        self.scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(self.optim, T_0=5, eta_min=1e-7)
 
-        self.scheduler = torch.optim.lr_scheduler.CyclicLR(self.optim, base_lr=base_lr, max_lr=max_lr, 
-                                                           step_size_up=step_size_up, step_size_down=step_size_down, 
-                                                           mode='triangular', cycle_momentum=False)
+        # self.scheduler = torch.optim.lr_scheduler.CyclicLR(self.optim, lr=base_lr, max_lr=max_lr, 
+        #                                                    step_size_up=step_size_up, step_size_down=step_size_down, 
+        #                                                    mode='triangular', cycle_momentum=False)
 
         self.name = name
 
